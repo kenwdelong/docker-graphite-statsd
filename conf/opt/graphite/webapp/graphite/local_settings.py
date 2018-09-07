@@ -3,6 +3,9 @@
 #
 # Additional customizations to Django settings can be added to this file as well
 
+import os
+
+
 #####################################
 # General Configuration #
 #####################################
@@ -20,7 +23,7 @@
 # Set your local timezone (Django's default is America/Chicago)
 # If your graphs appear to be offset by a couple hours then this probably
 # needs to be explicitly set to your local timezone.
-#TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Override this to provide documentation specific to your Graphite deployment
 #DOCUMENTATION_URL = "http://graphite.readthedocs.org/"
@@ -202,10 +205,10 @@
 # MIDDLEWARE_CLASSES or APPS
 #from graphite.app_settings import *
 
-import os
-
 LOG_DIR = '/var/log/graphite'
-SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
+#SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
+# I added this because this is what I had before, it might be needed to read the old data
+SECRET_KEY = 'notSoSecret123'
 
 if (os.getenv("MEMCACHE_HOST") is not None):
     MEMCACHE_HOSTS = os.getenv("MEMCACHE_HOST").split(",")
