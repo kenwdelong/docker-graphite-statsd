@@ -106,7 +106,7 @@ ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
 
 # Grafana installation
-RUN	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - \
+RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs \
 	&& npm install -g wizzy
 
