@@ -20,6 +20,7 @@ RUN apt-get -y update \
   python-rrdtool \
   pkg-config \
   && rm -rf /var/lib/apt/lists/*
+  
 
 # choose a timezone at build-time
 # use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
@@ -106,6 +107,8 @@ ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
 
 # Grafana installation
+ENV GRAFANA_VERSION=5.2.3
+  
 RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs wget \
 	&& npm install -g wizzy
