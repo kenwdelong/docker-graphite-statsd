@@ -1,4 +1,5 @@
 #!/bin/bash
+# force commit
 # Django 1.11
 PYTHONPATH=/opt/graphite/webapp django-admin.py makemigrations --settings=graphite.settings
 PYTHONPATH=/opt/graphite/webapp django-admin.py migrate auth --settings=graphite.settings
