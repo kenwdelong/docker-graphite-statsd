@@ -1,6 +1,7 @@
-This repo was based on [@hopsoft's](https://github.com/hopsoft/) [docker-graphite-statsd](https://github.com/hopsoft/docker-graphite-statsd) docker image and was used as base for "official" Graphite docker image with his permission. Also, it contains parts of famous [@obfuscurity's](https://github.com/obfuscurity/) [synthesize](https://github.com/obfuscurity/synthesize) Graphite installer. Thanks a lot, Nathan and Jason!
+This repo is based on [the official docker repo](git@github.com:kenwdelong/docker-graphite-statsd.git).
 
-Any suggestions / patches etc. are welcome!
+# Changes in this image
+- Timezone default set to America/Los_Angeles
 
 # Docker Image for Graphite & Statsd
 

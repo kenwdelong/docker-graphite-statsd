@@ -24,7 +24,7 @@ RUN apt-get -y update \
 
 # choose a timezone at build-time
 # use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
-ARG CONTAINER_TIMEZONE
+ARG CONTAINER_TIMEZONE=America/Los_Angeles
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
