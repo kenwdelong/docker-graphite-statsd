@@ -19,7 +19,6 @@ RUN apt-get -y update \
   python-cairo \
   python-rrdtool \
   pkg-config \
-  nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 # choose a timezone at build-time
@@ -107,8 +106,10 @@ ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
 
 # Grafana installation
-RUN apt-get -y install npm
-RUN npm install -g wizzy
+RUN	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - \
+    && apt-get install -y nodejs \
+	&& npm install -g wizzy
+
 RUN     mkdir /src/grafana \
         && mkdir /opt/grafana \
         && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz -O /src/grafana.tar.gz \
