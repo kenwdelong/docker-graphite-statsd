@@ -107,6 +107,7 @@ ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
 
 # Grafana installation
+RUN apt-get -y install npm
 RUN npm install -g wizzy
 RUN     mkdir /src/grafana \
         && mkdir /opt/grafana \
