@@ -105,6 +105,35 @@ ADD conf/etc/service/nginx/run /etc/service/nginx/run
 ADD conf /etc/graphite-statsd/conf
 ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
+
+# Grafana installation
+RUN npm install -g wizzy
+RUN     mkdir /src/grafana \
+        && mkdir /opt/grafana \
+        && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz -O /src/grafana.tar.gz \
+        && tar -xzf /src/grafana.tar.gz -C /opt/grafana --strip-components=1 \
+        && rm /src/grafana.tar.gz
+
+# Configure Grafana
+ADD     ./grafana/custom.ini /opt/grafana/conf/custom.ini
+
+RUN	cd /src \
+    && wizzy init \
+	&& extract() { cat /opt/grafana/conf/custom.ini | grep $1 | awk '{print $NF}'; } \
+	&& wizzy set grafana url $(extract ";protocol")://$(extract ";domain"):$(extract ";http_port")	\		
+	&& wizzy set grafana username $(extract ";admin_user")	\
+	&& wizzy set grafana password $(extract ";admin_password")
+	
+# Add the default dashboards
+RUN 	mkdir /src/datasources \
+        && mkdir /src/dashboards
+ADD	    ./grafana/datasources/* /src/datasources
+ADD     ./grafana/dashboards/* /src/dashboards/
+ADD     ./grafana/export-datasources-and-dashboards.sh /src/
+
+
+
+
 # cleanup
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
