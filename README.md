@@ -1,4 +1,4 @@
-This repo is based on [the official docker repo](git@github.com:kenwdelong/docker-graphite-statsd.git).
+This repo is based on [the official docker repo](https://github.com/graphite-project/docker-graphite-statsd).
 
 # Changes in this image
 - Timezone default set to America/Los_Angeles
