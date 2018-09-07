@@ -110,8 +110,8 @@ RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs \
 	&& npm install -g wizzy
 
-RUN     mkdir /src/grafana \
-        && mkdir /opt/grafana \
+RUN     mkdir -p /src/grafana \
+        && mkdir -p /opt/grafana \
         && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz -O /src/grafana.tar.gz \
         && tar -xzf /src/grafana.tar.gz -C /opt/grafana --strip-components=1 \
         && rm /src/grafana.tar.gz
