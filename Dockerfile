@@ -101,6 +101,7 @@ ADD conf/etc/service/graphite/run /etc/service/graphite/run
 ADD conf/etc/service/statsd/run /etc/service/statsd/run
 ADD conf/etc/service/nginx/run /etc/service/nginx/run
 ADD conf/etc/service/grafana/run /etc/service/grafana/run
+RUN chmod +x /etc/service/grafana/run
 
 # default conf setup
 ADD conf /etc/graphite-statsd/conf
