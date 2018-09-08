@@ -8,7 +8,9 @@
 	  graphiteHost: "127.0.0.1",
 	  flushInterval: 10000,
 	  
-	  deleteIdleStats: true,
+	  deleteGauges: true,
+	  deleteTimers: true,
+	  deleteSets:  true,
 
 	  backends: ['./backends/graphite'],
 	  graphite: {
