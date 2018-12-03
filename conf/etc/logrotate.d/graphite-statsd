@@ -1,6 +1,6 @@
 /var/log/*.log /var/log/*/*.log {
   weekly
-  size 50M
+  size 10M
   missingok
   rotate 5
   compress
