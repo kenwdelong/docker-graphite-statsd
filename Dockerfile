@@ -105,9 +105,7 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 # Grafana installation
 ENV GRAFANA_VERSION=5.2.3
   
-RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y nodejs wget \
-	&& npm install -g wizzy
+RUN npm install -g wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
@@ -131,7 +129,7 @@ RUN 	mkdir /src/datasources \
 ADD	    ./grafana/datasources/* /src/datasources
 ADD     ./grafana/dashboards/* /src/dashboards/
 ADD     ./grafana/export-datasources-and-dashboards.sh /src/
-
+# End Grafana installation
 
 
 
@@ -168,7 +166,7 @@ COPY --from=build /opt /opt
 RUN /usr/local/bin/django_admin_init.exp
 
 # defaults
-EXPOSE 80 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
+EXPOSE 80 81 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 
 CMD ["/sbin/my_init"]
