@@ -102,9 +102,6 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 
-
-
-
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update --fix-missing \
  && apt-get -y upgrade \
@@ -134,6 +131,41 @@ COPY conf /etc/graphite-statsd/conf/
 
 # copy /opt from build image
 COPY --from=build /opt /opt
+
+
+# Grafana installation
+ENV GRAFANA_VERSION=5.2.3
+  
+# Need this because node and npm are not on the path otherwise.
+RUN ln -s /opt/nodejs/bin/node /usr/local/bin/node && \
+    ln -s /opt/nodejs/bin/npm /usr/local/bin/npm && \
+    npm install -g wizzy
+
+RUN     mkdir -p /src/grafana \
+        && mkdir -p /opt/grafana \
+        && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz -O /src/grafana.tar.gz \
+        && tar -xzf /src/grafana.tar.gz -C /opt/grafana --strip-components=1 \
+        && rm /src/grafana.tar.gz
+
+# Configure Grafana
+ADD     ./grafana/custom.ini /opt/grafana/conf/custom.ini
+
+RUN	cd /src \
+    && wizzy init \
+	&& extract() { cat /opt/grafana/conf/custom.ini | grep $1 | awk '{print $NF}'; } \
+	&& wizzy set grafana url $(extract ";protocol")://$(extract ";domain"):$(extract ";http_port")	\		
+	&& wizzy set grafana username $(extract ";admin_user")	\
+	&& wizzy set grafana password $(extract ";admin_password")
+	
+# Add the default dashboards
+RUN 	mkdir /src/datasources \
+        && mkdir /src/dashboards
+ADD	    ./grafana/datasources/* /src/datasources
+ADD     ./grafana/dashboards/* /src/dashboards/
+ADD     ./grafana/export-datasources-and-dashboards.sh /src/
+# End Grafana installation
+
+
 
 RUN /usr/local/bin/django_admin_init.exp
 
