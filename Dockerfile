@@ -140,7 +140,7 @@ ENV GRAFANA_VERSION=5.2.3
 # I can't get the wizzy stuff to work with their node js  
 RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs wget \
-	&& npm install -g wizzy
+	&& /usr/bin/npm install -g wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
