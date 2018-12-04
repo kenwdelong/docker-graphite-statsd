@@ -94,14 +94,14 @@ ENV STATSD_INTERFACE udp
 
 # choose a timezone at build-time
 # use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
-ARG CONTAINER_TIMEZONE
+ARG CONTAINER_TIMEZONE=America/Los_Angeles
+ENV GRAPHITE_TIME_ZONE=America/Los_Angeles
 
 RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata; \
     fi
 
-# added wget for grafana
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update --fix-missing \
  && apt-get -y upgrade \
@@ -117,7 +117,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       python3-pip \
       redis \
       sqlite3 \
-      wget \    
  && apt-get clean \
  && apt-get autoremove --yes \
  && rm -rf \
@@ -136,11 +135,11 @@ COPY --from=build /opt /opt
 
 # Grafana installation
 ENV GRAFANA_VERSION=5.2.3
-  
-# Need this because node and npm are not on the path otherwise.
-RUN ln -s /opt/nodejs/bin/node /usr/local/bin/node && \
-    ln -s /opt/nodejs/bin/npm /usr/local/bin/npm && \
-    npm install -g wizzy
+
+# I can't get the wizzy stuff to work with their node js  
+RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get install -y nodejs wget \
+	&& npm install -g wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \

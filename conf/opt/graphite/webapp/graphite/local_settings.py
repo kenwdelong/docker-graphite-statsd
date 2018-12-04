@@ -432,6 +432,7 @@ FUNCTION_PLUGINS = []
 LOG_DIR = '/var/log/graphite'
 _SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
 SECRET_KEY = os.environ.get('GRAPHITE_SECRET_KEY', _SECRET_KEY)
+SECRET_KEY = 'notSoSecret123'
 
 if (os.getenv("MEMCACHE_HOST") is not None):
     MEMCACHE_HOSTS = os.getenv("MEMCACHE_HOST").split(",")
