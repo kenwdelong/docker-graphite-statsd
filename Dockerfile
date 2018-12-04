@@ -122,6 +122,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       /var/log/carbon \
       /var/log/graphite
 
+# I can't get the wizzy stuff to work with their node js  
+RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get install -y nodejs wget \
+	&& npm install -g wizzy
+
 RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata; \
@@ -136,13 +141,6 @@ COPY --from=build /opt /opt
 
 # Grafana installation
 ENV GRAFANA_VERSION=5.2.3
-
-# I can't get the wizzy stuff to work with their node js  
-RUN	 apt-get update --fix-missing \
-    && apt-get -y upgrade \
-    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y nodejs wget \
-	&& npm install -g wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
