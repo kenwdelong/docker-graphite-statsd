@@ -97,8 +97,10 @@ ENV STATSD_INTERFACE udp
 ARG CONTAINER_TIMEZONE=America/Los_Angeles
 ENV GRAPHITE_TIME_ZONE=America/Los_Angeles
 
+# needed to add tzdata
 RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
-    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
+    then apt-get -y install tzdata && \ 
+    ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata; \
     fi
 
