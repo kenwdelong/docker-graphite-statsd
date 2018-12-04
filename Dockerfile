@@ -117,6 +117,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       python3-pip \
       redis \
       sqlite3 \
+      wget \     # added for wizzy
  && apt-get clean \
  && apt-get autoremove --yes \
  && rm -rf \
