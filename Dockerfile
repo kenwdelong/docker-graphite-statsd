@@ -135,7 +135,7 @@ COPY --from=build /opt /opt
 
 
 # Grafana installation
-ENV GRAFANA_VERSION=5.2.3
+ENV GRAFANA_VERSION=5.4.0
 
 # I can't get the wizzy stuff to work with their node js
 # This was painful, it was install 8.10.0 without installing npm. From here https://deb.nodesource.com/node_6.x/dists/bionic/main/binary-amd64/Packages
