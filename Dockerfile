@@ -101,7 +101,7 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     dpkg-reconfigure -f noninteractive tzdata; \
     fi
 
-
+# added wget for grafana
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update --fix-missing \
  && apt-get -y upgrade \
@@ -117,7 +117,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       python3-pip \
       redis \
       sqlite3 \
-      wget \     # added for wizzy
+      wget \    
  && apt-get clean \
  && apt-get autoremove --yes \
  && rm -rf \
