@@ -102,34 +102,6 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 
-# Grafana installation
-ENV GRAFANA_VERSION=5.2.3
-  
-RUN npm install -g wizzy
-
-RUN     mkdir -p /src/grafana \
-        && mkdir -p /opt/grafana \
-        && wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz -O /src/grafana.tar.gz \
-        && tar -xzf /src/grafana.tar.gz -C /opt/grafana --strip-components=1 \
-        && rm /src/grafana.tar.gz
-
-# Configure Grafana
-ADD     ./grafana/custom.ini /opt/grafana/conf/custom.ini
-
-RUN	cd /src \
-    && wizzy init \
-	&& extract() { cat /opt/grafana/conf/custom.ini | grep $1 | awk '{print $NF}'; } \
-	&& wizzy set grafana url $(extract ";protocol")://$(extract ";domain"):$(extract ";http_port")	\		
-	&& wizzy set grafana username $(extract ";admin_user")	\
-	&& wizzy set grafana password $(extract ";admin_password")
-	
-# Add the default dashboards
-RUN 	mkdir /src/datasources \
-        && mkdir /src/dashboards
-ADD	    ./grafana/datasources/* /src/datasources
-ADD     ./grafana/dashboards/* /src/dashboards/
-ADD     ./grafana/export-datasources-and-dashboards.sh /src/
-# End Grafana installation
 
 
 
