@@ -7,6 +7,10 @@ This repo is based on [the official docker repo](https://github.com/graphite-pro
 - Set port 80 to Grafana and 81 to the Graphite web app
 - Removed some idle statistics from statsd
 
+## Testing ##
+Run the test script in the test directory.  Then go to port 80 on the container, log in as admin/admin, and create a chart that looks at `stats/counters/example/statsd/counter/changed/count`.  You should see the graph working there.
+
+
 # Docker Image for Graphite & Statsd
 
 ## Get Graphite & Statsd running instantly
