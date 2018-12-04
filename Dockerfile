@@ -97,13 +97,6 @@ ENV STATSD_INTERFACE udp
 ARG CONTAINER_TIMEZONE=America/Los_Angeles
 ENV GRAPHITE_TIME_ZONE=America/Los_Angeles
 
-# needed to add tzdata
-RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
-    then apt-get -y install tzdata && \ 
-    ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata; \
-    fi
-
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update --fix-missing \
  && apt-get -y upgrade \
@@ -119,6 +112,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       python3-pip \
       redis \
       sqlite3 \
+      tzdata \
  && apt-get clean \
  && apt-get autoremove --yes \
  && rm -rf \
@@ -127,6 +121,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
+
+RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
+    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata; \
+    fi
 
 COPY conf /
 COPY conf /etc/graphite-statsd/conf/
