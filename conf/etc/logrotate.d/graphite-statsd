@@ -1,5 +1,10 @@
-/var/log/*.log /var/log/*/*.log {
-  weekly
+/var/log/carbon.log
+/var/log/carbon-aggregator.log
+/var/log/cron.log
+/var/log/gunicorn.log
+/var/log/statsd.log
+/var/log/*/*.log {
+  daily
   size 10M
   missingok
   rotate 5
