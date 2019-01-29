@@ -3,8 +3,7 @@ This repo is based on [the official docker repo](https://github.com/graphite-pro
 # Changes in this image
 - Timezone default set to America/Los_Angeles
 - Version 6 of NodeJS installed
-- Installed Grafana
-- Set port 80 to Grafana and 81 to the Graphite web app
+- Installed Grafana on port 81
 - Removed some idle statistics from statsd
 
 ## Testing ##
