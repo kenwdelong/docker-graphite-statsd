@@ -113,8 +113,8 @@ RUN apk add --no-cache bash
 # This was painful, it was install 8.10.0 without installing npm. From here https://deb.nodesource.com/node_6.x/dists/bionic/main/binary-amd64/Packages
 # I found the version number.  
 RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y nodejs=6.14.1-1nodesource1 wget \
-	&& npm install -g wizzy
+    && apk add -y nodejs=6.14.1-1nodesource1 \
+	&& npm install --no-cache wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
