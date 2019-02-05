@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /opt/grafana/
 exec /opt/grafana/bin/grafana-server
