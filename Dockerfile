@@ -115,7 +115,7 @@ RUN apk add --no-cache bash
 #RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 #    && apk add -y nodejs=6.14.1-1nodesource1 \
 #	&& npm install -g wizzy
-RUN npm install wizzy
+RUN npm install -g wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
