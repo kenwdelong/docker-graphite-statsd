@@ -112,9 +112,10 @@ RUN apk add --no-cache bash
 # I can't get the wizzy stuff to work with their node js
 # This was painful, it was install 8.10.0 without installing npm. From here https://deb.nodesource.com/node_6.x/dists/bionic/main/binary-amd64/Packages
 # I found the version number.  
-RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apk add -y nodejs=6.14.1-1nodesource1 \
-	&& npm install --no-cache wizzy
+#RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+#    && apk add -y nodejs=6.14.1-1nodesource1 \
+#	&& npm install wizzy
+RUN npm install wizzy
 
 RUN     mkdir -p /src/grafana \
         && mkdir -p /opt/grafana \
