@@ -1,3 +1,7 @@
+# Abandoned
+I finally gave up on this. The changes between 1.1.4 (phusion) and 1.1.5 (alpine) we large, and now there are official images in docker hub both for graphie-statsd and grafana. Now I'm just using Docker Compose to install both of those images and link them with a bridge network.
+
+
 This repo is based on [the official docker repo](https://github.com/graphite-project/docker-graphite-statsd).
 
 # Changes in this image
