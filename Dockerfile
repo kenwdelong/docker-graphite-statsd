@@ -140,9 +140,6 @@ ADD	    ./grafana/datasources/* /src/datasources
 ADD     ./grafana/dashboards/* /src/dashboards/
 ADD     ./grafana/export-datasources-and-dashboards.sh /src/
 
-# Run file was not executable
-RUN chmod +x /etc/service/grafana/run
-
 # End Grafana installation
 
 
