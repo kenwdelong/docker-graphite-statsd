@@ -114,7 +114,7 @@ RUN apk add --no-cache bash
 # I found the version number.  
 #RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 #    && apk add -y nodejs=6.14.1-1nodesource1 \
-#	&& npm install wizzy
+#	&& npm install -g wizzy
 RUN npm install wizzy
 
 RUN     mkdir -p /src/grafana \
