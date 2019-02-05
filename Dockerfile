@@ -108,10 +108,11 @@ COPY conf/opt/statsd/config/ /opt/defaultconf/statsd/config/
 # Grafana installation
 ENV GRAFANA_VERSION=5.4.0
 
+RUN apk add --no-cache bash
 # I can't get the wizzy stuff to work with their node js
 # This was painful, it was install 8.10.0 without installing npm. From here https://deb.nodesource.com/node_6.x/dists/bionic/main/binary-amd64/Packages
 # I found the version number.  
-RUN	curl -sL https://deb.nodesource.com/setup_6.x | sh - \
+RUN	curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs=6.14.1-1nodesource1 wget \
 	&& npm install -g wizzy
 
