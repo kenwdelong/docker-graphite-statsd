@@ -150,6 +150,9 @@ LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 ENV STATSD_INTERFACE udp
 
 COPY conf /
+# Run file was not executable
+RUN chmod +x /etc/service/grafana/run
+
 
 # copy /opt from build image
 COPY --from=build /opt /opt
