@@ -49,7 +49,7 @@ Host | Container | Service
 2024 |      2024 | [carbon aggregator - pickle](http://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-aggregator-py)
 8080 |      8080 | Graphite internal gunicorn port (without Nginx proxying).
 8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
-8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
+8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
 By default, statsd listens on the UDP port 8125. If you want it to listen on the TCP port 8125 instead, you can set the environment variable `STATSD_INTERFACE` to `tcp` when running the container.
 
@@ -63,14 +63,14 @@ DOCKER ASSIGNED   | /opt/graphite/conf         | graphite config
 DOCKER ASSIGNED   | /opt/graphite/storage      | graphite stats storage
 DOCKER ASSIGNED   | /opt/graphite/webapp/graphite/functions/custom      | graphite custom functions dir
 DOCKER ASSIGNED   | /etc/nginx                 | nginx config
-DOCKER ASSIGNED   | /opt/statsd                | statsd config
+DOCKER ASSIGNED   | /opt/statsd/config         | statsd config
 DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
 DOCKER ASSIGNED   | /var/log                   | log files
 DOCKER ASSIGNED   | /var/lib/redis             | Redis TagDB data (optional)
 
 ### Base Image
 
-Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
+Version before (and including) 1.1.4-9 were built using [Phusion's base image](https://github.com/phusion/baseimage-docker). Current version is based on [Alpine Linux](https://alpinelinux.org/) because of image size (please see [PR#66](https://github.com/graphite-project/docker-graphite-statsd/pull/66) for details).
 
 * All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/).
 * Includes additional services such as logrotate, nginx, optional Redis for TagDB and optional collectd instance.
@@ -112,7 +112,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_WSGI_MAX_REQUESTS: (1000) limit on the number of requests a daemon process should process before it is shutdown and restarted.
 * GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
 
-### Graphite-web 
+### Graphite-web
 * GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
 * GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
 * GRAPHITE_LOG_ROTATION: (true) rotate logs
@@ -144,12 +144,13 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_MAX_FETCH_RETRIES: (2) Number of retries for a specific remote data fetch
 * GRAPHITE_FIND_CACHE_DURATION: (0) Time to cache remote metric find results
 * GRAPHITE_STATSD_HOST: ("127.0.0.1") If set, django_statsd.middleware.GraphiteRequestTimingMiddleware and django_statsd.middleware.GraphiteMiddleware will be enabled.
+* GRAPHITE_URL_ROOT: ('') Sets a url prefix if deploying graphite-web to a non-root location.
 
 ## TagDB
 Graphite stores tag information in a separate tag database (TagDB). Please check [tags documentation](https://graphite.readthedocs.io/en/latest/tags.html) for details.
 
 * GRAPHITE_TAGDB: ('graphite.tags.localdatabase.LocalDatabaseTagDB') TagDB is a pluggable store, by default it uses the local SQLite database.
-* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags. 
+* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags.
 * GRAPHITE_TAGDB_CACHE_DURATION: (60) Time to cache seriesByTag results.
 * GRAPHITE_TAGDB_AUTOCOMPLETE_LIMIT: (100) Autocomplete default result limit.
 * GRAPHITE_TAGDB_REDIS_HOST: ('localhost') Redis TagDB host
@@ -165,6 +166,10 @@ Use `COLLECTD=1` environment variable to enable local collectd instance
 
 ## Carbon-relay
 Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]` section of carbon.conf to configure it.
+
+=======
+## Logrotate
+By default logs are rotated daily, using built-in `/etc/periodic/daily/logrotate` script. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
 
 ## Change the Configuration
 
@@ -182,7 +187,7 @@ be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`.
 ---
 
 **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
-For example, if `/opt/statsd/config.js` looks like this.
+For example, if `/opt/statsd/config/udp.js` looks like this.
 
 ```
 flushInterval: 10000
@@ -221,12 +226,12 @@ docker run -d\
  --restart=always\
  -v /path/to/graphite/configs:/opt/graphite/conf\
  -v /path/to/graphite/data:/opt/graphite/storage\
- -v /path/to/statsd:/opt/statsd\
+ -v /path/to/statsd_config:/opt/statsd/config\
  graphiteapp/graphite-statsd
 ```
 
 **Note**: The container will initialize properly if you mount empty volumes at
-          `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd`.
+          `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd/config`.
 
 ## Memcached config
 
@@ -257,6 +262,8 @@ The following command will start the graphite statsd container through docker-co
 docker-compose up
 ```
 
+## Running through Kubernetes
+You can use this 3-rd party repo with Graphite Helm chart - https://github.com/kiwigrid/helm-charts/tree/master/charts/graphite
 
 
 ## Additional Reading
